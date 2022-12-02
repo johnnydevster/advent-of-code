@@ -1,4 +1,8 @@
-with open('input.txt') as f:
+from pathlib import Path
+
+p = Path(__file__).with_name('input.txt')
+
+with p.open('r') as f:
     lines = f.readlines()
 
     values = []
