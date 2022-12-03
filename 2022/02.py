@@ -1,4 +1,4 @@
-from pathlib import Path
+from utils import read_file
 
 # SCORING
 #
@@ -32,6 +32,7 @@ win_conditions = {
     "scissors": "paper"
 }
 
+# Same as win_conditions, reversed
 loss_conditions = {value: key for (key, value) in win_conditions.items()}
 
 worths = {
@@ -82,16 +83,13 @@ player_defs = {
 
 score = 0
 
-p = Path(__file__).with_name('input.txt')
+lines = list(read_file("input_2.txt"))
 
-with p.open('r') as f:
-    lines = f.readlines()
-
-    for line in lines:
-        opponent_hand = opponent_defs[line[0]]
-        player_hand = player_defs[line[2]]
-        points = opponent_hand.play(player_hand)
-        score += points
+for line in lines:
+    opponent_hand = opponent_defs[line[0]]
+    player_hand = player_defs[line[2]]
+    points = opponent_hand.play(player_hand)
+    score += points
 
 print(f"Part 1 solution: {score}")
 
@@ -105,20 +103,17 @@ round_strategy = {
 
 score = 0
 
-with p.open('r') as f:
-    lines = f.readlines()
+for line in lines:
+    opponent_hand = opponent_defs[line[0]]
+    strategy = round_strategy[line[2]]
 
-    for line in lines:
-        opponent_hand = opponent_defs[line[0]]
-        strategy = round_strategy[line[2]]
-
-        if strategy == "lose":
-            player_hand = PlayHand(opponent_hand.wins_against)
-            score += opponent_hand.play(player_hand)
-        if strategy == "tie":
-            score += opponent_hand.play(opponent_hand)
-        if strategy == "win":
-            player_hand = PlayHand(opponent_hand.loses_against)
-            score += opponent_hand.play(player_hand)
+    if strategy == "lose":
+        player_hand = PlayHand(opponent_hand.wins_against)
+        score += opponent_hand.play(player_hand)
+    if strategy == "tie":
+        score += opponent_hand.play(opponent_hand)
+    if strategy == "win":
+        player_hand = PlayHand(opponent_hand.loses_against)
+        score += opponent_hand.play(player_hand)
 
 print(f"Part 2 solution: {score}")
