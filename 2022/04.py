@@ -52,7 +52,6 @@ for line in lines:
     split = line.split(",")
 
     ranges = []
-    print(split)
 
     for r in split:
         ranges.append(create_range_from_string(r))
