@@ -31,7 +31,7 @@ for line in list(lines)[10:]:
 
     from_pos_stack_length = len(stack[from_pos])
 
-    # Lift up (copy) the boxes that should be moved, (and reverse them, for part 2)
+    # Lift up (copy) the boxes that should be moved, (and reverse them, for part 1)
     moved_boxes = list(
         stack[from_pos][from_pos_stack_length - quant:])
 
