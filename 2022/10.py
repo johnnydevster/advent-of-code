@@ -29,3 +29,23 @@ for signal in signal_stops:
     signal_values.append(signal * values[signal])
 
 print(f"Part 1: {sum(signal_values)}")
+
+# Part 2
+
+output_string = ""
+pos = 0
+
+for cycle in values.keys():
+    current_x = values[cycle]
+    sprite_position = range(current_x - 1, current_x + 2)
+
+    if pos in sprite_position:
+        output_string += "#"
+    else:
+        output_string += "."
+
+    pos += 1
+    if pos % 40 == 0:
+        print(output_string)
+        pos = 0
+        output_string = ""
