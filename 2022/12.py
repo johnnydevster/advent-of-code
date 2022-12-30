@@ -118,67 +118,72 @@ print(" ")
 print(end)
 print(" ")
 
-visited = []
-current_pos = start
-steps = 0
+
+positions = [start, *list(filter(lambda item: item["el"] == 1, queue))]
+a_steps = []
 
 print(" ")
 
 
-def is_visited(pos):
+def is_visited(pos, visited):
     return len(list(filter(lambda item: item["x"] == pos["x"] and item["y"] == pos["y"], visited))) > 0
 
 
-while True:
-    adjacent = []
-    curr_x = current_pos["x"]
-    curr_y = current_pos["y"]
-    curr_el = grid[curr_x][curr_y]["el"]
-    visited.append({"x": curr_x, "y": curr_y})
+for current_pos in positions:
+    visited = []
+    steps = 0
+    while True:
+        adjacent = []
+        curr_x = current_pos["x"]
+        curr_y = current_pos["y"]
+        curr_el = grid[curr_x][curr_y]["el"]
+        visited.append({"x": curr_x, "y": curr_y})
 
-    left_x, left_y = (curr_x - 1, curr_y)
-    right_x, right_y = (curr_x + 1, curr_y)
-    top_x, top_y = (curr_x, curr_y - 1)
-    bottom_x, bottom_y = (curr_x, curr_y + 1)
+        left_x, left_y = (curr_x - 1, curr_y)
+        right_x, right_y = (curr_x + 1, curr_y)
+        top_x, top_y = (curr_x, curr_y - 1)
+        bottom_x, bottom_y = (curr_x, curr_y + 1)
 
-    if left_x > -1:
-        left_el = grid[left_x][left_y]["el"]
-        left = {"x": left_x, "y": left_y,
-                "el": left_el, **grid[left_x][left_y]}
-        el_diff = left["el"] - curr_el
-        if not is_visited(left) and el_diff <= 1:
-            adjacent.append(left)
+        if left_x > -1:
+            left_el = grid[left_x][left_y]["el"]
+            left = {"x": left_x, "y": left_y,
+                    "el": left_el, **grid[left_x][left_y]}
+            el_diff = left["el"] - curr_el
+            if not is_visited(left, visited) and el_diff <= 1:
+                adjacent.append(left)
 
-    if right_x < x_limit:
-        right_el = grid[right_x][right_y]["el"]
-        right = {"x": right_x, "y": right_y,
-                 "el": right_el, **grid[right_x][right_y]}
-        el_diff = right["el"] - curr_el
-        if not is_visited(right) and el_diff <= 1:
-            adjacent.append(right)
+        if right_x < x_limit:
+            right_el = grid[right_x][right_y]["el"]
+            right = {"x": right_x, "y": right_y,
+                     "el": right_el, **grid[right_x][right_y]}
+            el_diff = right["el"] - curr_el
+            if not is_visited(right, visited) and el_diff <= 1:
+                adjacent.append(right)
 
-    if top_y > -1:
-        top_el = grid[top_x][top_y]["el"]
-        top = {"x": top_x, "y": top_y, "el": top_el, **grid[top_x][top_y]}
-        el_diff = top["el"] - curr_el
-        if not is_visited(top) and el_diff <= 1:
-            adjacent.append(top)
+        if top_y > -1:
+            top_el = grid[top_x][top_y]["el"]
+            top = {"x": top_x, "y": top_y, "el": top_el, **grid[top_x][top_y]}
+            el_diff = top["el"] - curr_el
+            if not is_visited(top, visited) and el_diff <= 1:
+                adjacent.append(top)
 
-    if bottom_y < y_limit:
-        bottom_el = grid[bottom_x][bottom_y]["el"]
-        bottom = {"x": bottom_x, "y": bottom_y,
-                  "el": bottom_el, **grid[bottom_x][bottom_y]}
-        el_diff = bottom["el"] - curr_el
-        if not is_visited(bottom) and el_diff <= 1:
-            adjacent.append(bottom)
+        if bottom_y < y_limit:
+            bottom_el = grid[bottom_x][bottom_y]["el"]
+            bottom = {"x": bottom_x, "y": bottom_y,
+                      "el": bottom_el, **grid[bottom_x][bottom_y]}
+            el_diff = bottom["el"] - curr_el
+            if not is_visited(bottom, visited) and el_diff <= 1:
+                adjacent.append(bottom)
 
-    steps += 1
-    found_target = len(list(filter(
-        lambda item: item["x"] == end["x"] and item["y"] == end["y"], adjacent))) > 0
-    if found_target:
-        break
-    smallest_score = min(adjacent, key=lambda item: item["score"])
-    print(smallest_score)
-    current_pos = {"x": smallest_score["x"], "y": smallest_score["y"]}
+        steps += 1
+        found_target = len(list(filter(
+            lambda item: item["x"] == end["x"] and item["y"] == end["y"], adjacent))) > 0
+        if found_target:
+            break
+        smallest_score = min(adjacent, key=lambda item: item["score"])
+        print(smallest_score)
+        current_pos = {"x": smallest_score["x"], "y": smallest_score["y"]}
 
-print(steps)
+    a_steps.append(steps)
+
+print(min(a_steps))
